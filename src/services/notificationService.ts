@@ -1,6 +1,6 @@
-
 import { AppDataSource } from '../config/datasource';
 import { Notification } from '../entity/Notification';
+import { sendMessageToQueue } from '../messegeQueue/producer';
 
 export class NotificationService {
   private notificationRepository = AppDataSource.getRepository(Notification);
@@ -13,7 +13,18 @@ export class NotificationService {
     notification.message = message;
     notification.isRead = false;
 
-    return await this.notificationRepository.save(notification);
+    // Save the notification
+    const savedNotification = await this.notificationRepository.save(notification);
+
+    // Send message to RabbitMQ
+    await sendMessageToQueue({
+      userId,
+      packageId,
+      message,
+      notificationId: savedNotification.id, 
+    });
+
+    return savedNotification;
   }
 
   // Get all notifications for a user
@@ -29,7 +40,8 @@ export class NotificationService {
       await this.notificationRepository.save(notification);
     }
   }
-  async updateStatus(notificationId: number , status : string) {
+
+  async updateStatus(notificationId: number, status: string) {
     const notification = await this.notificationRepository.findOneBy({ id: notificationId });
     if (notification) {
       notification.status = status;
