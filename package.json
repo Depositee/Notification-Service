@@ -37,13 +37,14 @@
     "version": "standard-version",
     "reset-hard": "git clean -dfx && git reset --hard && yarn",
     "prepare-release": "run-s reset-hard test cov:check doc:html version doc:publish",
-    "dev" : "ts-node src/app.ts"
+    "dev": "ts-node src/app.ts"
   },
   "engines": {
     "node": ">=10"
   },
   "dependencies": {
     "@bitauth/libauth": "^1.17.1",
+    "@types/express": "^5.0.0",
     "amqplib": "^0.10.4",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",

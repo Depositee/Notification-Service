@@ -6,6 +6,7 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "conventionalCommits.scopes": [
     "eslint",
-    "config"
+    "config",
+    "app.ts"
   ]
 }
