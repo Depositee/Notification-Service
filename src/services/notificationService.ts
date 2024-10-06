@@ -6,9 +6,10 @@ export class NotificationService {
   private notificationRepository = AppDataSource.getRepository(Notification);
 
   // Create and save a new notification
-  async createNotification(userId: string, message: string) {
+  async createNotification(userId: string, packageId: string, message: string) {
     const notification = new Notification();
     notification.userId = userId;
+    notification.packageId = packageId;
     notification.message = message;
     notification.isRead = false;
 
@@ -25,6 +26,13 @@ export class NotificationService {
     const notification = await this.notificationRepository.findOneBy({ id: notificationId });
     if (notification) {
       notification.isRead = true;
+      await this.notificationRepository.save(notification);
+    }
+  }
+  async updateStatus(notificationId: number , status : string) {
+    const notification = await this.notificationRepository.findOneBy({ id: notificationId });
+    if (notification) {
+      notification.status = status;
       await this.notificationRepository.save(notification);
     }
   }

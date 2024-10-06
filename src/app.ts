@@ -16,8 +16,8 @@ async function startServer() {
     
     app.post('/notifications', async (req, res) => {
       try {
-        const { userId, message } = req.body;
-        const notification = await notificationService.createNotification(userId, message);
+        const { userId,packageId, message } = req.body;
+        const notification = await notificationService.createNotification(userId,packageId, message);
         res.json(notification);
       } catch (error) {
         console.error('Error creating notification:', error);

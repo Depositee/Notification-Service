@@ -16,6 +16,9 @@ export class Notification {
   userId!: string;
 
   @Column()
+  packageId!: string;
+
+  @Column()
   message!: string;
 
   @Column()
