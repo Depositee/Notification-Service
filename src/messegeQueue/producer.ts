@@ -1,6 +1,6 @@
 import amqp from 'amqplib';
 
-const RABBITMQ_URL = 'amqp://localhost'; // Your RabbitMQ server URL
+const RABBITMQ_URL = 'amqp://localhost';
 const QUEUE = 'notification_queue';
 
 export const sendMessageToQueue = async (message: any) => {
