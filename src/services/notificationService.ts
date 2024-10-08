@@ -12,6 +12,7 @@ export class NotificationService {
     notification.packageId = packageId;
     notification.message = message;
     notification.isRead = false;
+    notification.status = "init";
 
     // Save the notification
     const savedNotification = await this.notificationRepository.save(notification);
