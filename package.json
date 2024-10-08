@@ -37,7 +37,8 @@
     "version": "standard-version",
     "reset-hard": "git clean -dfx && git reset --hard && yarn",
     "prepare-release": "run-s reset-hard test cov:check doc:html version doc:publish",
-    "dev": "ts-node src/app.ts"
+    "dev": "ts-node src/app.ts",
+    "consume" :"ts-node src/consumer.ts"
   },
   "engines": {
     "node": ">=10"

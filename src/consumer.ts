@@ -16,6 +16,7 @@ export const startConsumer = async () => {
       async (msg : any) => {
         if (msg !== null) {
           channel.ack(msg); // Acknowledge message
+          console.log("this is msg" ,JSON.parse(msg.content));
         }
       },
       { noAck: false } // Ensure message acknowledgment
@@ -24,3 +25,5 @@ export const startConsumer = async () => {
     console.error('Error starting RabbitMQ consumer:', error);
   }
 };
+
+startConsumer();
