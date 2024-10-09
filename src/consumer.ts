@@ -1,29 +1,31 @@
 import amqp from 'amqplib';
-const RABBITMQ_URL = 'amqp://localhost'; // Your RabbitMQ server URL
-const QUEUE = 'notification_queue';
 
-export const startConsumer = async () => {
+const RABBITMQ_URL = 'amqp://localhost';
+const EXCHANGE = 'notification_exchange';
+
+export const consumeMessages = async (userId: number) => {
   try {
     const connection = await amqp.connect(RABBITMQ_URL);
     const channel = await connection.createChannel();
 
-    await channel.assertQueue(QUEUE, { durable: true });
+    await channel.assertExchange(EXCHANGE, 'topic', { durable: true });
 
-    console.log('Waiting for messages in queue:', QUEUE);
+    const queue = `notification_queue_${userId}`;
+    await channel.assertQueue(queue, { durable: true });
 
-    channel.consume(
-      QUEUE,
-      async (msg : any) => {
-        if (msg !== null) {
-          channel.ack(msg); // Acknowledge message
-          console.log("this is msg" ,JSON.parse(msg.content));
-        }
-      },
-      { noAck: false } // Ensure message acknowledgment
-    );
+    const routingKey = `user.${userId}.notification`;
+    await channel.bindQueue(queue, EXCHANGE, routingKey);
+
+    console.log(`Waiting for messages for user ${userId}...`);
+    channel.consume(queue, (message) => {
+      if (message) {
+        channel.ack(message);
+        console.log(`Received message for user ${userId}:`, (message.content).toJSON);
+      }
+    },{ noAck: false } );
   } catch (error) {
-    console.error('Error starting RabbitMQ consumer:', error);
+    console.error('Error consuming messages:', error);
   }
 };
 
-startConsumer();
+consumeMessages(12)

@@ -17,13 +17,14 @@ export class NotificationService {
     // Save the notification
     const savedNotification = await this.notificationRepository.save(notification);
 
-    // Send message to RabbitMQ
-    await sendMessageToQueue({
+    const notificationMessage = {
       userId,
       packageId,
       message,
-      notificationId: savedNotification.id, 
-    });
+      notificationId: savedNotification.id,
+    };
+    // Send message to RabbitMQ
+    await sendMessageToQueue(notificationMessage,parseInt(userId));
 
     return savedNotification;
   }
