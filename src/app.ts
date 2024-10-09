@@ -36,6 +36,30 @@ async function startServer() {
         res.status(500).json({ error: 'Failed to fetch notifications' });
       }
     });
+     // Update notification by notificationId
+     app.put('/notifications/:notificationId', async (req, res) => {
+      try {
+        const notificationId = parseInt(req.params.notificationId, 10);
+        const updatedData = req.body;
+        const updatedNotification = await notificationService.updateNotification(notificationId, updatedData);
+        res.json(updatedNotification);
+      } catch (error) {
+        console.error('Error updating notification:', error);
+        res.status(500).json({ error: 'Failed to update notification' });
+      }
+    });
+
+    // Delete notification by notificationId
+    app.delete('/notifications/:notificationId', async (req, res) => {
+      try {
+        const notificationId = parseInt(req.params.notificationId, 10);
+        await notificationService.deleteNotification(notificationId);
+        res.json({ message: 'Notification deleted successfully' });
+      } catch (error) {
+        console.error('Error deleting notification:', error);
+        res.status(500).json({ error: 'Failed to delete notification' });
+      }
+    });
     
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
