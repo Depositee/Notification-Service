@@ -17,10 +17,10 @@ export const consumeMessages = async (userId: number) => {
     await channel.bindQueue(queue, EXCHANGE, routingKey);
 
     console.log(`Waiting for messages for user ${userId}...`);
-    channel.consume(queue, (message) => {
+    channel.consume(queue, async(message : any) => {
       if (message) {
         channel.ack(message);
-        console.log(`Received message for user ${userId}:`, (message.content).toJSON);
+        console.log(`Received message for user ${userId}:`, JSON.parse(message.content));
       }
     },{ noAck: false } );
   } catch (error) {
@@ -28,4 +28,5 @@ export const consumeMessages = async (userId: number) => {
   }
 };
 
-consumeMessages(12)
+// when usage use this function with the userId
+// Example : consumeMessages(userId)
