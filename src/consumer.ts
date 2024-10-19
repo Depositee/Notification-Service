@@ -3,7 +3,7 @@ import amqp from 'amqplib';
 const RABBITMQ_URL = 'amqp://localhost';
 const EXCHANGE = 'notification_exchange';
 
-export const consumeMessages = async (userId: number) => {
+export const consumeMessages = async (userId: string) => {
   try {
     const connection = await amqp.connect(RABBITMQ_URL);
     const channel = await connection.createChannel();
@@ -17,16 +17,17 @@ export const consumeMessages = async (userId: number) => {
     await channel.bindQueue(queue, EXCHANGE, routingKey);
 
     console.log(`Waiting for messages for user ${userId}...`);
-    channel.consume(queue, async(message : any) => {
+    channel.consume(queue, async (message: any) => {
       if (message) {
         channel.ack(message);
         console.log(`Received message for user ${userId}:`, JSON.parse(message.content));
       }
-    },{ noAck: false } );
+    }, { noAck: false });
   } catch (error) {
     console.error('Error consuming messages:', error);
   }
 };
 
 // when usage use this function with the userId
-// Example : consumeMessages(userId)
+const userId = "671372fe70d389ca3c5d47f8"
+consumeMessages(userId)

@@ -24,7 +24,7 @@ export class NotificationService {
       notificationId: savedNotification.id,
     };
     // Send message to RabbitMQ
-    await sendMessageToQueue(notificationMessage,parseInt(userId));
+    await sendMessageToQueue(notificationMessage, userId);
 
     return savedNotification;
   }

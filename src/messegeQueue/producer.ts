@@ -3,7 +3,7 @@ import amqp from 'amqplib';
 const RABBITMQ_URL = 'amqp://localhost';
 const EXCHANGE = 'notification_exchange';
 
-export const sendMessageToQueue = async (message: any, userId: number) => {
+export const sendMessageToQueue = async (message: any, userId: string) => {
   try {
     const connection = await amqp.connect(RABBITMQ_URL);
     const channel = await connection.createChannel();
