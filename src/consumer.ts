@@ -29,5 +29,6 @@ export const consumeMessages = async (userId: string) => {
 };
 
 // when usage use this function with the userId
-const userId = "671372fe70d389ca3c5d47f8"
+const userId = "671207717a198c8657edbdd3" // Jame
+// const userId = "671372fe70d389ca3c5d47f8" // Tar
 consumeMessages(userId)
