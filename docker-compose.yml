@@ -35,21 +35,14 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   rabbitmq:
-    image: 'bitnami/rabbitmq:3.13.7'
-    platform: 'linux/arm64'
-    container_name: notification-rabbitmq
-    environment:
-      RABBITMQ_ERL_COOKIE: 'securestring'
-      RABBITMQ_USERNAME: 'guest'
-      RABBITMQ_PASSWORD: 'guest'
-      RABBITMQ_VHOST: '/'
-      RABBITMQ_PLUGINS: "rabbitmq_management"
+    image: rabbitmq:4.0-management
+    container_name: rabbitmq
     ports:
-      - "8080:15672"
       - "5672:5672"
+      - "8080:15672"
+    restart: on-failure:3
     networks:
       - backend
-
 networks:
   backend:
     driver: bridge
