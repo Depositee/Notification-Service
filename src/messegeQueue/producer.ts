@@ -12,6 +12,10 @@ export const sendMessageToQueue = async (message: any, userId: string) => {
 
     const routingKey = `user.${userId}.notification`;
 
+    const queue = await channel.assertQueue(routingKey, { durable: true });
+
+    await channel.bindQueue(queue.queue, EXCHANGE, routingKey);
+
     channel.publish(EXCHANGE, routingKey, Buffer.from(JSON.stringify(message)), {
       persistent: true,
     });
