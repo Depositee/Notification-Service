@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  payment-services:
+  notification-services:
     container_name: notification-services
     build:
       context: .
@@ -9,11 +9,11 @@ services:
     ports:
       - "3001:3001"
     environment:
-      DB_HOST : localhost
-      DB_PORT : 5433
-      DB_USERNAME : admin
-      DB_PASSWORD : root
-      DB_DATABASE : notification_system
+      DB_HOST: notification-db
+      DB_PORT: 5432
+      DB_USERNAME: admin
+      DB_PASSWORD: root
+      DB_DATABASE: notification_system
     networks:
       - backend
     depends_on:
@@ -28,7 +28,7 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: postgres
+      POSTGRES_DB: notification_system
     networks:
       - backend
     volumes:
@@ -39,17 +39,20 @@ services:
     platform: 'linux/arm64'
     container_name: my-rabbitmq
     environment:
-    RABBITMQ_ERL_COOKIE: 'securestring'
-    RABBITMQ_USERNAME: 'guest'
-    RABBITMQ_PASSWORD: 'guest'
-    RABBITMQ_VHOST: '/'
-    RABBITMQ_PLUGINS: "rabbitmq_management"
+      RABBITMQ_ERL_COOKIE: 'securestring'
+      RABBITMQ_USERNAME: 'guest'
+      RABBITMQ_PASSWORD: 'guest'
+      RABBITMQ_VHOST: '/'
+      RABBITMQ_PLUGINS: "rabbitmq_management"
     ports:
-    - '8080:15672'
-    - '5672:5672'
+      - "8080:15672"
+      - "5672:5672"
+    networks:
+      - backend
 
 networks:
   backend:
-    external: true
+    driver: bridge
+
 volumes:
   postgres_data:
