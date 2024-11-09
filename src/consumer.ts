@@ -10,7 +10,7 @@ export const consumeMessages = async (userId: string) => {
 
     await channel.assertExchange(EXCHANGE, 'topic', { durable: true });
 
-    const queue = `notification_queue_${userId}`;
+    const queue = `user.${userId}.notification`;
     await channel.assertQueue(queue, { durable: true });
 
     const routingKey = `user.${userId}.notification`;
